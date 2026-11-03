@@ -72,7 +72,8 @@ export const assetInput = z.object({
     .string()
     .trim()
     .min(1)
-    .max(35)
+    // Long enough for Tesouro and CDB names, e.g. "Tesouro IPCA+ com Juros Semestrais 2045".
+    .max(100)
     .transform((v) => v.toUpperCase()),
   name: z.string().trim().max(200).nullish(),
   assetClass: z.enum(assetClasses),

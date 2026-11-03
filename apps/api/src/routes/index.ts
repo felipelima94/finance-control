@@ -13,6 +13,7 @@ import type { Db } from "../db/client";
 import { assets, cashTransactions, categories, institutions, trades } from "../db/schema";
 import { ConflictError } from "../errors";
 import { registerCrud } from "./crud";
+import { registerPortfolioRoutes } from "./portfolio";
 
 const all = (conds: (SQL | undefined)[]) => {
   const list = conds.filter((c): c is SQL => c !== undefined);
@@ -21,6 +22,7 @@ const all = (conds: (SQL | undefined)[]) => {
 
 export function registerRoutes(app: FastifyInstance, db: Db) {
   app.get("/health", async () => ({ status: "ok" }));
+  registerPortfolioRoutes(app, db);
 
   registerCrud(app, db, {
     path: "/institutions",

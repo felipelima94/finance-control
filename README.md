@@ -30,6 +30,21 @@ pnpm dev          # API em http://127.0.0.1:3333 e dashboard em http://localhost
 
 Outros comandos: `pnpm test`, `pnpm typecheck`, `pnpm build`.
 
+### Importar a planilha da myProfit
+
+Exporte o "Relatório Histórico de investimentos" (.xlsx) na myProfit e rode:
+
+```bash
+pnpm import:myprofit ~/Downloads/relatorio.xlsx --dry-run   # só mostra o que seria importado
+pnpm import:myprofit ~/Downloads/relatorio.xlsx
+```
+
+Ou envie pela API: `curl --data-binary @relatorio.xlsx -H 'content-type: application/octet-stream' http://127.0.0.1:3333/imports/myprofit`.
+
+Pode importar o mesmo arquivo (ou um export mais novo) várias vezes: operações já importadas são ignoradas.
+Instituições e ativos são criados automaticamente, com a classe vinda da coluna "Grupo".
+Resgates totais de renda fixa (quantidade 0 na planilha) vendem a posição inteira daquela data.
+
 Variáveis da API (opcionais): `PORT` (3333), `HOST` (127.0.0.1), `DATABASE_FILE` (`data/finance.db`), `CORS_ORIGIN` (`http://localhost:3000`).
 No dashboard: `API_URL` (`http://127.0.0.1:3333`).
 
@@ -58,11 +73,31 @@ Cada recurso tem `GET /x`, `GET /x/:id`, `POST /x`, `PUT /x/:id` e `DELETE /x/:i
 - `/assets`
 - `/trades` (filtros: `assetId`, `institutionId`, `from`, `to`)
 
+Carteira (calculada a partir de `trades`):
+
+- `GET /portfolio/positions` (`asOf`, `includeClosed=true`): quantidade, preço médio, custo total, resultado realizado e de day trade por ativo, mais avisos de inconsistência.
+- `GET /portfolio/sales` (`from`, `to`, `assetId`): cada venda com custo, valor líquido e lucro, separando day trade.
+- `GET /portfolio/summary` (`asOf`): totais por classe de ativo e moeda.
+- `POST /imports/myprofit` (`dryRun=true`): importa o .xlsx enviado no corpo.
+
+### Como o preço médio é calculado
+
+Segue o método de custo médio da Receita Federal (`apps/api/src/portfolio/engine.ts`):
+
+- Compras somam quantidade e custo (quantidade × preço + taxas). Preço médio = custo / quantidade.
+- Vendas tiram quantidade pelo preço médio, que não muda. Resultado = valor da venda − taxas − quantidade × preço médio.
+- Desdobramento multiplica a quantidade e grupamento divide, sem mudar o custo. Bonificação soma quantidade pelo custo atribuído.
+- Day trade (compra e venda do mesmo ativo, no mesmo dia e na mesma corretora) é separado primeiro e não altera o preço médio.
+- Posições somam todas as corretoras. Ativos em USD ficam em USD (a conversão para BRL vem depois).
+- Se uma venda é maior que a posição, só a quantidade em carteira entra no cálculo e a posição ganha um aviso. Normalmente isso indica um evento que falta lançar (desdobramento, bonificação ou troca de ticker).
+
+Para uma troca de ticker (ex.: NUBR33 → ROXO34), lance um `transfer_out` no ticker antigo e um `transfer_in` no novo, com a mesma quantidade e o preço médio como `unitPrice`.
+
 Erros: `400` validação (com `issues`), `404` não encontrado, `409` duplicado ou registro em uso.
 
 ## Plano
 
 1. ✅ Base e modelo de dados (este passo)
-2. Importar a planilha da myProfit e calcular a carteira (preço médio, vendas, BRL/USD, day trade)
+2. ✅ Importar a planilha da myProfit e calcular a carteira (preço médio, vendas, BRL/USD, day trade)
 3. Dashboard de fluxo de caixa e carteira
 4. Adaptador para a API de movimentação da B3
