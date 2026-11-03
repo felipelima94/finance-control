@@ -13,6 +13,8 @@ import type { Db } from "../db/client";
 import { assets, cashTransactions, categories, institutions, trades } from "../db/schema";
 import { ConflictError } from "../errors";
 import { registerCrud } from "./crud";
+import type { B3Client } from "../integrations/b3/client";
+import { registerB3Routes } from "./b3";
 import { registerCashFlowRoutes } from "./cash-flow";
 import { registerPortfolioRoutes } from "./portfolio";
 
@@ -21,10 +23,11 @@ const all = (conds: (SQL | undefined)[]) => {
   return list.length ? and(...list) : undefined;
 };
 
-export function registerRoutes(app: FastifyInstance, db: Db) {
+export function registerRoutes(app: FastifyInstance, db: Db, opts: { b3Client?: B3Client | null } = {}) {
   app.get("/health", async () => ({ status: "ok" }));
   registerPortfolioRoutes(app, db);
   registerCashFlowRoutes(app, db);
+  registerB3Routes(app, db, opts.b3Client ?? null);
 
   registerCrud(app, db, {
     path: "/institutions",
