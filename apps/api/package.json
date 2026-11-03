@@ -10,13 +10,16 @@
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx src/db/migrate.ts",
-    "db:seed": "tsx src/db/seed.ts"
+    "db:seed": "tsx src/db/seed.ts",
+    "import:myprofit": "tsx src/scripts/import-myprofit.ts"
   },
   "dependencies": {
     "@fastify/cors": "11.4.0",
     "@fc/shared": "workspace:*",
     "better-sqlite3": "13.0.3",
+    "decimal.js": "10.6.0",
     "drizzle-orm": "0.45.4",
+    "exceljs": "4.4.0",
     "fastify": "5.12.8",
     "zod": "4.6.7"
   },

@@ -11,7 +11,8 @@
     "typecheck": "pnpm -r typecheck",
     "db:generate": "pnpm --filter @fc/api db:generate",
     "db:migrate": "pnpm --filter @fc/api db:migrate",
-    "db:seed": "pnpm --filter @fc/api db:seed"
+    "db:seed": "pnpm --filter @fc/api db:seed",
+    "import:myprofit": "pnpm --filter @fc/api import:myprofit"
   },
   "devDependencies": {
     "typescript": "5.9.3"

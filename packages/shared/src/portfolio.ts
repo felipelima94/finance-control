@@ -1,0 +1,71 @@
+import { z } from "zod";
+import type { AssetClass, Currency } from "./enums";
+import { isoDate } from "./schemas";
+
+/** All decimal values are strings. Money is rounded to 2 places, prices to 6, quantities to 8. */
+export interface Position {
+  assetId: number;
+  ticker: string;
+  assetClass: AssetClass;
+  currency: Currency;
+  quantity: string;
+  averagePrice: string;
+  /** Amount invested in the current position, fees included (quantity × average price). */
+  totalCost: string;
+  /** Profit or loss already realized by regular (swing trade) sales. */
+  realizedPnl: string;
+  /** Profit or loss realized by day trades. */
+  dayTradePnl: string;
+  firstTradeDate: string;
+  lastTradeDate: string;
+  warnings: string[];
+}
+
+export interface Sale {
+  date: string;
+  assetId: number;
+  ticker: string;
+  assetClass: AssetClass;
+  currency: Currency;
+  institutionId: number | null;
+  quantity: string;
+  /** Sale value net of fees. */
+  proceeds: string;
+  /** Average cost of the quantity sold. */
+  cost: string;
+  pnl: string;
+  dayTrade: boolean;
+}
+
+export interface ClassSummary {
+  assetClass: AssetClass;
+  currency: Currency;
+  positions: number;
+  totalCost: string;
+  realizedPnl: string;
+  dayTradePnl: string;
+}
+
+export const positionsQuery = z.object({
+  asOf: isoDate.optional(),
+  includeClosed: z
+    .enum(["true", "false"])
+    .optional()
+    .transform((v) => v === "true"),
+});
+
+export const salesQuery = z.object({
+  from: isoDate.optional(),
+  to: isoDate.optional(),
+  assetId: z.coerce.number().int().positive().optional(),
+});
+
+export interface ImportResult {
+  dryRun: boolean;
+  rowsRead: number;
+  tradesCreated: number;
+  tradesSkipped: number;
+  assetsCreated: number;
+  institutionsCreated: number;
+  errors: { row: number; message: string }[];
+}
