@@ -1,0 +1,19 @@
+{
+  "name": "finance-control",
+  "private": true,
+  "packageManager": "pnpm@10.28.0",
+  "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "dev:api": "pnpm --filter @fc/api dev",
+    "dev:web": "pnpm --filter @fc/web dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck",
+    "db:generate": "pnpm --filter @fc/api db:generate",
+    "db:migrate": "pnpm --filter @fc/api db:migrate",
+    "db:seed": "pnpm --filter @fc/api db:seed"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
+  }
+}
