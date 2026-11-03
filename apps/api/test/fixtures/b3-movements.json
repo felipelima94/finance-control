@@ -1,0 +1,159 @@
+{
+  "equities": [
+    {
+      "data": {
+        "equitiesPeriods": {
+          "documentNumber": "00123456789",
+          "referenceStartDate": "2024-04-01",
+          "referenceEndDate": "2024-04-30",
+          "equitiesMovements": [
+            {
+              "referenceDate": "2024-04-03",
+              "productCategoryName": "Renda Variável",
+              "productTypeName": "Ações",
+              "movementType": "Transferência - Liquidação",
+              "operationType": "Crédito",
+              "tickerSymbol": "BBAS3",
+              "corporationName": "BANCO DO BRASIL S.A.",
+              "participantName": "XP INVESTIMENTOS CCTVM S/A",
+              "participantDocumentNumber": "02332886000104",
+              "equitiesQuantity": 100,
+              "unitPrice": 55.2,
+              "operationValue": 5520,
+              "transferOwnershipDescription": "Transferência - Liquidação",
+              "isinCode": "BRBBASACNOR3"
+            },
+            {
+              "referenceDate": "2024-04-16",
+              "productCategoryName": "Renda Variável",
+              "productTypeName": "Ações",
+              "movementType": "Desdobro",
+              "operationType": "Crédito",
+              "tickerSymbol": "BBAS3",
+              "corporationName": "BANCO DO BRASIL S.A.",
+              "participantName": "XP INVESTIMENTOS CCTVM S/A",
+              "participantDocumentNumber": "02332886000104",
+              "equitiesQuantity": 100,
+              "unitPrice": null,
+              "operationValue": null,
+              "transferOwnershipDescription": "Desdobro"
+            },
+            {
+              "referenceDate": "2024-04-25",
+              "productCategoryName": "Renda Variável",
+              "productTypeName": "FII - Fundo de Investimento Imobiliário",
+              "movementType": "Rendimento",
+              "operationType": "Crédito",
+              "tickerSymbol": "HGLG11",
+              "participantName": "XP INVESTIMENTOS CCTVM S/A",
+              "participantDocumentNumber": "02332886000104",
+              "equitiesQuantity": 50,
+              "unitPrice": 1.1,
+              "operationValue": 55,
+              "transferOwnershipDescription": "Rendimento"
+            }
+          ]
+        }
+      },
+      "Links": { "self": "https://b3/equities?page=1", "next": "https://b3/equities?page=2" }
+    },
+    {
+      "data": {
+        "equitiesPeriods": {
+          "documentNumber": "00123456789",
+          "referenceStartDate": "2024-04-01",
+          "referenceEndDate": "2024-04-30",
+          "equitiesMovements": [
+            {
+              "referenceDate": "2024-04-26",
+              "productCategoryName": "Renda Variável",
+              "productTypeName": "FII - Fundo de Investimento Imobiliário",
+              "movementType": "Transferência - Liquidação",
+              "operationType": "Débito",
+              "tickerSymbol": "HGLG11",
+              "participantName": "XP INVESTIMENTOS CCTVM S/A",
+              "participantDocumentNumber": "02332886000104",
+              "equitiesQuantity": 10,
+              "unitPrice": 160,
+              "operationValue": 1600,
+              "transferOwnershipDescription": "Transferência - Liquidação"
+            },
+            {
+              "referenceDate": "2024-04-29",
+              "productCategoryName": "Renda Variável",
+              "productTypeName": "Ações",
+              "movementType": "Transferência",
+              "operationType": "Crédito",
+              "tickerSymbol": "ITSA4",
+              "participantName": "NU INVEST CORRETORA DE VALORES S.A.",
+              "participantDocumentNumber": "62169875000179",
+              "equitiesQuantity": 30,
+              "unitPrice": null,
+              "operationValue": null,
+              "transferOwnershipDescription": "Transferência"
+            }
+          ]
+        }
+      },
+      "Links": { "self": "https://b3/equities?page=2" }
+    }
+  ],
+  "fixedIncome": {
+    "data": {
+      "fixedIncomes": {
+        "documentNumber": "00123456789",
+        "referenceStartDate": "2024-04-01",
+        "referenceEndDate": "2024-04-30",
+        "fixedIncomeMovements": [
+          {
+            "referenceDate": "2024-04-10",
+            "productCategoryName": "Renda Fixa",
+            "productTypeName": "CDB",
+            "movementType": "Aplicação",
+            "operationType": "Crédito",
+            "tickerSymbol": "",
+            "corporationName": "BANCO XYZ S.A.",
+            "expirationDate": "2026-04-10",
+            "participantName": "NU INVEST CORRETORA DE VALORES S.A.",
+            "participantDocumentNumber": "62169875000179",
+            "fixedIncomeQuantity": 1,
+            "unitPrice": 1000,
+            "operationValue": 1000,
+            "updatedUnitPriceMTM": 1000,
+            "updateValueMTM": 1000
+          }
+        ]
+      }
+    },
+    "Links": { "self": "https://b3/fixed-income?page=1" }
+  },
+  "treasuryBonds": [
+    {
+      "data": {
+        "treasuryBondsPeriods": {
+          "documentNumber": "00123456789",
+          "referenceStartDate": "2024-04-01",
+          "referenceEndDate": "2024-04-30",
+          "treasuryBondsMovements": [
+            {
+              "referenceDate": "2024-04-12",
+              "productCategoryName": "Tesouro Direto",
+              "productTypeName": "Tesouro IPCA+",
+              "movementType": "Compra",
+              "operationType": "Crédito",
+              "tickerSymbol": "NTN-B PRINC",
+              "assetDescription": "Tesouro IPCA+ 2035",
+              "participantName": "XP INVESTIMENTOS CCTVM S/A",
+              "participantDocumentNumber": "02332886000104",
+              "treasuryBondsQuantity": 0.5,
+              "unitPrice": 2000,
+              "operationValue": 1000,
+              "isinCode": "BRSTNCNTB4U6"
+            }
+          ]
+        }
+      },
+      "Links": { "self": "https://b3/treasury?page=1" }
+    }
+  ]
+}

@@ -84,3 +84,18 @@ export interface CashFlowSummary {
   /** Totals per category and direction, largest first. */
   categories: { categoryId: number | null; name: string; direction: "in" | "out"; total: string; count: number }[];
 }
+
+export interface B3ImportResult extends ImportResult {
+  /** Buys and sales skipped because the same operation already exists from another source (e.g. myProfit). */
+  matchedOtherSource: number;
+  /** Movements that do not change positions (proventos, custody transfers...), grouped by reason. */
+  ignored: { reason: string; movementType: string; count: number }[];
+}
+
+export const b3SyncInput = z
+  .object({
+    from: isoDate.refine((v) => v >= "2018-01-01", "B3 only has data from 2018 on"),
+    to: isoDate,
+    dryRun: z.boolean().default(false),
+  })
+  .refine((v) => v.from <= v.to, { message: "from must be before to", path: ["to"] });

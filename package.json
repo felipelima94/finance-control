@@ -12,7 +12,8 @@
     "db:generate": "pnpm --filter @fc/api db:generate",
     "db:migrate": "pnpm --filter @fc/api db:migrate",
     "db:seed": "pnpm --filter @fc/api db:seed",
-    "import:myprofit": "pnpm --filter @fc/api import:myprofit"
+    "import:myprofit": "pnpm --filter @fc/api import:myprofit",
+    "sync:b3": "pnpm --filter @fc/api sync:b3"
   },
   "devDependencies": {
     "typescript": "5.9.3"

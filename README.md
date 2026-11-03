@@ -48,6 +48,34 @@ Resgates totais de renda fixa (quantidade 0 na planilha) vendem a posição inte
 Variáveis da API (opcionais): `PORT` (3333), `HOST` (127.0.0.1), `DATABASE_FILE` (`data/finance.db`), `CORS_ORIGIN` (`http://localhost:3000`).
 No dashboard: `API_URL` (`http://127.0.0.1:3333`).
 
+### Integração com a B3
+
+O adaptador da API "B3 Investidor - Movimentação" v2 (`apps/api/src/integrations/b3`) lê as movimentações de ações, renda fixa e Tesouro e grava como operações com origem `b3`.
+
+```bash
+pnpm sync:b3 --from 2024-01-01 --to 2024-12-31 --dry-run   # chama a API (precisa das variáveis B3_*)
+pnpm sync:b3 --file respostas.json                         # importa respostas da API salvas em JSON
+```
+
+Pela API: `POST /integrations/b3/sync` com `{ "from", "to", "dryRun" }` e `POST /imports/b3` com `{ "equities": [...], "fixedIncome": [...], "treasuryBonds": [...] }`. `GET /integrations/b3/status` diz se as credenciais estão configuradas.
+
+Configuração em `apps/api/.env.example`: URL base, URL do token OAuth2 (client credentials), client id e secret, certificado e chave para mTLS e o CPF.
+O acesso à API exige credenciamento junto à B3. Até lá, dá para testar com `--file` e o exemplo em `apps/api/test/fixtures/b3-movements.json`.
+
+Como as movimentações viram operações:
+
+| Movimentação | Vira |
+| --- | --- |
+| Compra, Aplicação, Transferência - Liquidação (crédito) | compra |
+| Venda, Resgate, Vencimento, Transferência - Liquidação (débito) | venda |
+| Desdobro, Bonificação em Ativos (crédito) | bonificação (as ações extras, a custo zero se a B3 não informar o preço) |
+| Rendimento, Dividendo, Juros, Amortização | ignorado por enquanto (proventos) |
+| Grupamento, Frações, Transferência de custódia, Atualização | ignorado, aparece no resumo em `ignored` |
+
+- Sincronizar o mesmo período de novo não duplica nada.
+- Uma compra ou venda que já veio da myProfit (mesmo ativo, tipo e quantidade, até 7 dias antes, porque a B3 informa a liquidação) não é gravada de novo e entra em `matchedOtherSource`.
+- Os períodos são consultados mês a mês, seguindo a paginação (`Links.next`) e repetindo em caso de 429 ou 5xx.
+
 ## Dashboard
 
 Em http://localhost:3000, com `pnpm dev` rodando:
@@ -110,4 +138,4 @@ Erros: `400` validação (com `issues`), `404` não encontrado, `409` duplicado 
 1. ✅ Base e modelo de dados (este passo)
 2. ✅ Importar a planilha da myProfit e calcular a carteira (preço médio, vendas, BRL/USD, day trade)
 3. ✅ Dashboard de fluxo de caixa e carteira
-4. Adaptador para a API de movimentação da B3
+4. ✅ Adaptador para a API de movimentação da B3

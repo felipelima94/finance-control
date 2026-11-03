@@ -11,7 +11,8 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx src/db/migrate.ts",
     "db:seed": "tsx src/db/seed.ts",
-    "import:myprofit": "tsx src/scripts/import-myprofit.ts"
+    "import:myprofit": "tsx src/scripts/import-myprofit.ts",
+    "sync:b3": "tsx src/scripts/sync-b3.ts"
   },
   "dependencies": {
     "@fastify/cors": "11.4.0",
@@ -21,6 +22,7 @@
     "drizzle-orm": "0.45.4",
     "exceljs": "4.4.0",
     "fastify": "5.12.8",
+    "undici": "7.30.1",
     "zod": "4.6.7"
   },
   "devDependencies": {
