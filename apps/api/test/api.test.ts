@@ -189,3 +189,31 @@ describe("seed", () => {
     conn.close();
   });
 });
+
+describe("cash flow summary", () => {
+  it("totals money in and out per month and category", async () => {
+    const salario = (await post("/categories", { name: "Salário", kind: "income" })).json();
+    const mercado = (await post("/categories", { name: "Mercado", kind: "expense" })).json();
+    const tx = (date: string, amount: string, direction: string, categoryId?: number, currency = "BRL") =>
+      post("/cash-transactions", { date, description: "x", amount, direction, categoryId, currency });
+    await tx("2026-09-05", "10000", "in", salario.id);
+    await tx("2026-09-10", "450.10", "out", mercado.id);
+    await tx("2026-10-05", "10000", "in", salario.id);
+    await tx("2026-10-12", "300.25", "out", mercado.id);
+    await tx("2026-10-13", "50", "out");
+    await tx("2026-10-14", "99", "out", undefined, "USD");
+
+    const all = (await app.inject({ method: "GET", url: "/cash-flow/summary" })).json();
+    expect(all.totals).toEqual({ in: "20000.00", out: "800.35", net: "19199.65" });
+    expect(all.months).toEqual([
+      { month: "2026-09", in: "10000.00", out: "450.10", net: "9549.90" },
+      { month: "2026-10", in: "10000.00", out: "350.25", net: "9649.75" },
+    ]);
+    expect(all.categories.map((c: { name: string }) => c.name)).toEqual(["Salário", "Mercado", "Sem categoria"]);
+
+    const oct = (await app.inject({ method: "GET", url: "/cash-flow/summary?from=2026-10-01&to=2026-10-31" })).json();
+    expect(oct.totals.out).toBe("350.25");
+    const usd = (await app.inject({ method: "GET", url: "/cash-flow/summary?currency=USD" })).json();
+    expect(usd.totals.out).toBe("99.00");
+  });
+});
