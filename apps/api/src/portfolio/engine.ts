@@ -218,7 +218,7 @@ function applyDay(st: State, day: EngineTrade[], date: string, sale: SaleFn) {
     let { q, proceeds } = s;
     if (q.minus(st.quantity).gt(DUST)) {
       st.warnings.push(
-        `${date}: sold ${qty(q)} but only ${qty(st.quantity)} were held; only the held quantity was counted`,
+        `${date}: venda de ${qty(q)}, mas só havia ${qty(st.quantity)} em carteira; só a quantidade em carteira entrou no cálculo`,
       );
       if (st.quantity.lte(0)) continue;
       proceeds = proceeds.times(st.quantity).div(q);

@@ -120,7 +120,7 @@ describe("data gaps", () => {
       t({ tradeDate: "2024-01-02", type: "buy", quantity: "120", unitPrice: "10" }),
       t({ tradeDate: "2024-08-19", type: "sell", quantity: "210", unitPrice: "28" }),
     ]);
-    expect(positions[0]!.warnings[0]).toMatch(/sold 210 but only 120/);
+    expect(positions[0]!.warnings[0]).toMatch(/venda de 210, mas só havia 120/);
     expect(positions[0]!.quantity).toBe("0");
     expect(sales[0]).toMatchObject({ quantity: "120", proceeds: "3360.00", cost: "1200.00" });
   });

@@ -48,6 +48,15 @@ Resgates totais de renda fixa (quantidade 0 na planilha) vendem a posição inte
 Variáveis da API (opcionais): `PORT` (3333), `HOST` (127.0.0.1), `DATABASE_FILE` (`data/finance.db`), `CORS_ORIGIN` (`http://localhost:3000`).
 No dashboard: `API_URL` (`http://127.0.0.1:3333`).
 
+## Dashboard
+
+Em http://localhost:3000, com `pnpm dev` rodando:
+
+- **Visão geral**: entradas, saídas e saldo do mês, gráfico dos últimos 12 meses, saídas por categoria, carteira por classe (BRL e USD) e aviso de inconsistências.
+- **Carteira**: posições por classe com quantidade, preço médio, custo, % da carteira e resultados, com filtro por classe e posições encerradas.
+- **Lançamentos**: cadastro e lista de entradas e saídas do mês.
+- **Operações**: cadastro de compras, vendas e eventos (desdobramento, grupamento, bonificação, transferência) e histórico por ativo.
+
 ## Modelo de dados
 
 | Tabela | Para que serve |
@@ -79,6 +88,7 @@ Carteira (calculada a partir de `trades`):
 - `GET /portfolio/sales` (`from`, `to`, `assetId`): cada venda com custo, valor líquido e lucro, separando day trade.
 - `GET /portfolio/summary` (`asOf`): totais por classe de ativo e moeda.
 - `POST /imports/myprofit` (`dryRun=true`): importa o .xlsx enviado no corpo.
+- `GET /cash-flow/summary` (`from`, `to`, `currency`): entradas, saídas e saldo por mês e por categoria.
 
 ### Como o preço médio é calculado
 
@@ -99,5 +109,5 @@ Erros: `400` validação (com `issues`), `404` não encontrado, `409` duplicado 
 
 1. ✅ Base e modelo de dados (este passo)
 2. ✅ Importar a planilha da myProfit e calcular a carteira (preço médio, vendas, BRL/USD, day trade)
-3. Dashboard de fluxo de caixa e carteira
+3. ✅ Dashboard de fluxo de caixa e carteira
 4. Adaptador para a API de movimentação da B3

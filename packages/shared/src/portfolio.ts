@@ -69,3 +69,18 @@ export interface ImportResult {
   institutionsCreated: number;
   errors: { row: number; message: string }[];
 }
+
+export const cashFlowQuery = z.object({
+  from: isoDate.optional(),
+  to: isoDate.optional(),
+  currency: z.enum(["BRL", "USD", "EUR"]).default("BRL"),
+});
+
+export interface CashFlowSummary {
+  currency: Currency;
+  totals: { in: string; out: string; net: string };
+  /** One entry per month that has transactions, oldest first. `month` is YYYY-MM. */
+  months: { month: string; in: string; out: string; net: string }[];
+  /** Totals per category and direction, largest first. */
+  categories: { categoryId: number | null; name: string; direction: "in" | "out"; total: string; count: number }[];
+}
